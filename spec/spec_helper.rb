@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "scalingo/provider_api"
+require 'webmock/rspec'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

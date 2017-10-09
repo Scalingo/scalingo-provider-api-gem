@@ -24,7 +24,7 @@ Or install it yourself as:
 ### Intialization
 
 ```ruby
-client = Scalingo::ProviderApi.new("user", "password")
+client = Scalingo::ProviderApi::Client.new("user", "password")
 ```
 
 ### Find an app by id

@@ -1,5 +1,5 @@
 module Scalingo
-  class ProviderApi
+  module ProviderApi
     VERSION = "0.1.0"
   end
 end
