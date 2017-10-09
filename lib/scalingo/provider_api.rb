@@ -18,7 +18,7 @@ module Scalingo
       #  * body: should this method accept a body?
       METHODS = {
         find_app: { method: :get, path: '/v1/provider/apps/:resource_id' },
-        send_config: { method: :post, path: '/v1/addons/:resource_id/config', body: true },
+        send_config: { method: :patch, path: '/v1/addons/:resource_id/config', body: true },
         provision: { method: :post, path: '/v1/addons/:resource_id/provision' }
       }.freeze
 
