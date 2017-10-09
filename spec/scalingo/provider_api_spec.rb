@@ -33,8 +33,8 @@ RSpec.describe Scalingo::ProviderApi do
 
     describe '#send_config' do
       it 'should send a request to the correct url' do
-        stub_request(:patch, "https://api.scalingo.com/v1/addons/1234/config").
-          with(headers: {'Authorization'=>'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type'=>'application/json'}, body: {A: "B"}).
+        stub_request(:patch, "https://api.scalingo.com/v1/provider/addons/1234/config").
+          with(headers: {'Authorization'=>'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type'=>'application/json'}, body: {config: {A: "B"}}).
           to_return(body: '{"key": "value"}')
 
         resp = client.send_config("1234", {A:'B'})
@@ -46,7 +46,7 @@ RSpec.describe Scalingo::ProviderApi do
       end
 
       it 'should fail if the server return an error' do
-        stub_request(:patch, "https://api.scalingo.com/v1/addons/1234/config").
+        stub_request(:patch, "https://api.scalingo.com/v1/provider/addons/1234/config").
           with(headers: {'Authorization'=>'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type'=>'application/json'}).
           to_return(body: '{"key": "value"}', status: 500)
 
@@ -56,7 +56,7 @@ RSpec.describe Scalingo::ProviderApi do
 
     describe '#provision' do
       it 'should send a request to the correct url' do
-        stub_request(:post, "https://api.scalingo.com/v1/addons/1234/provision").
+        stub_request(:post, "https://api.scalingo.com/v1/provider/addons/1234/actions/provision").
           with(headers: {'Authorization'=>'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type'=>'application/json'}).
           to_return(body: '{"key": "value"}')
 
@@ -69,7 +69,7 @@ RSpec.describe Scalingo::ProviderApi do
       end
 
       it 'should fail if the server return an error' do
-        stub_request(:post, "https://api.scalingo.com/v1/addons/1234/provision").
+        stub_request(:post, "https://api.scalingo.com/v1/provider/addons/1234/actions/provision").
           with(headers: {'Authorization'=>'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type'=>'application/json'}).
           to_return(body: '{"key": "value"}', status: 500)
 

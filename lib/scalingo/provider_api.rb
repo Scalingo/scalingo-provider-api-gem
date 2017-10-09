@@ -16,10 +16,11 @@ module Scalingo
       #    Parameters can must be valid with the following regex: /:[a-z_]+/
       #    The method will use arguments in the order of appeareance in the url
       #  * body: should this method accept a body?
+      #  * body_hook: lambda function that will transform the body
       METHODS = {
         find_app: { method: :get, path: '/v1/provider/apps/:resource_id' },
-        send_config: { method: :patch, path: '/v1/addons/:resource_id/config', body: true },
-        provision: { method: :post, path: '/v1/addons/:resource_id/provision' }
+        send_config: { method: :patch, path: '/v1/provider/addons/:resource_id/config', body: true, body_hook: lambda {|b| {config: b}}},
+        provision: { method: :post, path: '/v1/provider/addons/:resource_id/actions/provision' }
       }.freeze
 
       def initialize(user, password, args = {})
@@ -51,16 +52,20 @@ module Scalingo
           # Set an instance variable with the arg name
           self.instance_variable_set name.to_s, a[index]
 
-          # Replace the variable name with her value in the path
-          path = path.gsub(old_name.to_s, self.instance_variable_get(name))
+          if name != "@body"
+            # Replace the variable name with its value in the path
+            path = path.gsub(old_name.to_s, self.instance_variable_get(name))
+          end
         end
 
-        conn = Faraday.new url: @base_url do | conn |
-          conn.basic_auth(@user, @password)
+        conn = Faraday.new url: @base_url do |c|
+          c.basic_auth(@user, @password)
 
-          conn.use Faraday::Response::RaiseError
-          conn.use Faraday::Adapter::NetHttp
+          c.use Faraday::Response::RaiseError
+          c.use Faraday::Adapter::NetHttp
         end
+
+        @body = desc[:body_hook].call @body if !desc[:body_hook].nil?
 
         res = conn.send(desc[:method], path) do |req|
           req.headers['Content-Type'] = 'application/json'
