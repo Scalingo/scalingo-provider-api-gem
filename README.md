@@ -36,7 +36,7 @@ app = client.find_app "resource_id"
 ### Send configuration for an addon
 
 ```ruby
-client.send_config "resource_id", {ENV_1: "VALUE", ENV_2: "VALUE2"}
+client.send_config "resource_id", [{name: "TCP_ENDPOINT", value: "tcp://localhost:1234"}]
 ```
 
 ### Provision an addon

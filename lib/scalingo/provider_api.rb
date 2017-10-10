@@ -41,20 +41,20 @@ module Scalingo
         args = path.scan(/:[a-z_]+/).uniq
 
         # If we need a body add :body to the list of arguments
-        args << ":body" if desc[:body]
+        args << ':body' if desc[:body]
 
         raise "Invalid arg count: #{a.length}, expected: #{args.length}" if args.length != a.length
 
         args.each_with_index do |name, index|
           old_name = name
-          name="@#{name[1..-1]}" # :abc => @abc
+          name = "@#{name[1..-1]}" # :abc => @abc
 
           # Set an instance variable with the arg name
-          self.instance_variable_set name.to_s, a[index]
+          instance_variable_set name.to_s, a[index]
 
-          if name != "@body"
+          if name != '@body'
             # Replace the variable name with its value in the path
-            path = path.gsub(old_name.to_s, self.instance_variable_get(name))
+            path = path.gsub(old_name.to_s, instance_variable_get(name))
           end
         end
 
